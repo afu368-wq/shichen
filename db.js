@@ -46,6 +46,17 @@ function init() {
             created_at      TEXT DEFAULT (datetime('now', 'localtime')),
             FOREIGN KEY (user_id) REFERENCES users(id)
         );
+
+        CREATE TABLE IF NOT EXISTS visits (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            ip              TEXT DEFAULT '',
+            country         TEXT DEFAULT '',
+            city            TEXT DEFAULT '',
+            duration_sec    INTEGER DEFAULT 0,
+            page_url        TEXT DEFAULT '',
+            user_agent      TEXT DEFAULT '',
+            created_at      TEXT DEFAULT (datetime('now', 'localtime'))
+        );
     `);
 
     console.log('[DB] 数据库初始化完成');
@@ -122,9 +133,32 @@ function getUserContacts(userId) {
     ).all(userId);
 }
 
+// ========== 访问统计 ==========
+
+function addVisit(ip, country, city, pageUrl, userAgent) {
+    return getDb().prepare(
+        'INSERT INTO visits (ip, country, city, page_url, user_agent) VALUES (?, ?, ?, ?, ?)'
+    ).run(ip, country, city, pageUrl, userAgent);
+}
+
+function updateVisitDuration(id, durationSec) {
+    getDb().prepare('UPDATE visits SET duration_sec = ? WHERE id = ?').run(durationSec, id);
+}
+
+function getVisitStats(days = 7) {
+    const d = getDb();
+    const total = d.prepare('SELECT COUNT(*) as count FROM visits WHERE created_at >= datetime("now", "localtime", ?)').get('-' + days + ' days');
+    const byCountry = d.prepare('SELECT country, COUNT(*) as count FROM visits WHERE created_at >= datetime("now", "localtime", ?) GROUP BY country ORDER BY count DESC').all('-' + days + ' days');
+    const byCity = d.prepare('SELECT city, country, COUNT(*) as count FROM visits WHERE created_at >= datetime("now", "localtime", ?) AND city != "" GROUP BY city, country ORDER BY count DESC LIMIT 20').all('-' + days + ' days');
+    const avgDuration = d.prepare('SELECT ROUND(AVG(duration_sec), 1) as avg FROM visits WHERE duration_sec > 0 AND created_at >= datetime("now", "localtime", ?)').get('-' + days + ' days');
+    const recent = d.prepare('SELECT * FROM visits ORDER BY id DESC LIMIT 20').all();
+    return { total: total.count, avgDuration: avgDuration.avg || 0, byCountry, byCity, recent };
+}
+
 module.exports = {
     init, getDb,
     findOrCreateWechatUser, getUserById, addTrialQuota, consumeTrialQuota,
     addSponsor, getSponsors,
-    addContact, getUserContacts
+    addContact, getUserContacts,
+    addVisit, updateVisitDuration, getVisitStats
 };

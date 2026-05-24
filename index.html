@@ -2701,5 +2701,48 @@
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', init);
     </script>
+
+    <!-- 访问统计埋点 -->
+    <script>
+        (function() {
+            var visitId = null;
+            var startTime = Date.now();
+
+            function sendStart(country, city) {
+                fetch('/api/visit/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        country: country || '',
+                        city: city || '',
+                        pageUrl: location.pathname
+                    })
+                }).then(function(r) { return r.json(); })
+                  .then(function(data) { visitId = data.id; })
+                  .catch(function() {});
+            }
+
+            function sendEnd() {
+                if (!visitId) return;
+                var durationSec = Math.round((Date.now() - startTime) / 1000);
+                navigator.sendBeacon('/api/visit/end', JSON.stringify({
+                    id: visitId,
+                    durationSec: durationSec
+                }));
+            }
+
+            // 获取 IP 归属地
+            fetch('http://ip-api.com/json/?fields=country,city')
+                .then(function(r) { return r.json(); })
+                .then(function(geo) {
+                    sendStart(geo.country || '', geo.city || '');
+                })
+                .catch(function() {
+                    sendStart('', '');
+                });
+
+            window.addEventListener('beforeunload', sendEnd);
+        })();
+    </script>
 </body>
 </html>

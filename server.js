@@ -144,6 +144,31 @@ app.get('/api/contact/history', authMiddleware, (req, res) => {
     })));
 });
 
+// ========== 访问统计 ==========
+
+app.post('/api/visit/start', (req, res) => {
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+    const userAgent = req.headers['user-agent'] || '';
+    const { country = '', city = '', pageUrl = '' } = req.body;
+    const result = db.addVisit(ip, country, city, pageUrl, userAgent);
+    res.json({ id: result.lastInsertRowid });
+});
+
+app.post('/api/visit/end', (req, res) => {
+    const { id, durationSec } = req.body;
+    if (!id || durationSec === undefined) {
+        return res.status(400).json({ error: '缺少参数' });
+    }
+    db.updateVisitDuration(id, durationSec);
+    res.json({ success: true });
+});
+
+app.get('/api/visit/stats', authMiddleware, (req, res) => {
+    const { days = 7 } = req.query;
+    const stats = db.getVisitStats(parseInt(days, 10));
+    res.json(stats);
+});
+
 // 健康检查
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', time: new Date().toISOString() });
