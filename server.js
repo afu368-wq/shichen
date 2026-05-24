@@ -163,7 +163,7 @@ app.post('/api/visit/end', (req, res) => {
     res.json({ success: true });
 });
 
-app.get('/api/visit/stats', authMiddleware, (req, res) => {
+app.get('/api/visit/stats', (req, res) => {
     const { days = 7 } = req.query;
     const stats = db.getVisitStats(parseInt(days, 10));
     res.json(stats);
