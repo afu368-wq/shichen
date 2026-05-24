@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职场时位 - 网页测试版</title>
+    <style>
+        /* 莫兰迪色系 */
+        :root {
+            --primary: #6D8B74;
+            --secondary: #5F7161;
+            --accent: #D0C9C0;
+            --background: #F5F1E8;
+            --card: #FFFFFF;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-light: #999999;
+            --shadow: 0 4px 24px rgba(0,0,0,0.06);
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 头部 */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--accent);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* 卡片 */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* 表单 */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background: var(--background);
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* 按钮 */
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+        }
+
+        .btn:disabled {
+            background: var(--accent);
+            cursor: not-allowed;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* 能量卡片 */
+        .energy-card {
+            background: linear-gradient(135deg, #6D8B74, #5F7161);
+            color: white;
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+        }
+
+        .energy-tag {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .energy-icon {
+            font-size: 3rem;
+        }
+
+        .energy-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .relation-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .ganzhi-info {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        /* 建议列表 */
+        .advice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .advice-item {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            gap: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .advice-icon {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .advice-content {
+            flex: 1;
+        }
+
+        .advice-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .advice-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 日期选择器 */
+        .date-picker {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 8px 0;
+            margin-bottom: 24px;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+        }
+
+        .date-picker::-webkit-scrollbar {
+            display: none;
+        }
+
+        .date-item {
+            flex: 0 0 auto;
+            min-width: 64px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            background: var(--background);
+            border: 2px solid transparent;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            scroll-snap-align: start;
+            user-select: none;
+        }
+
+        .date-item:hover {
+            border-color: var(--accent);
+        }
+
+        .date-item.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .date-item.active .date-label {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .date-item .date-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .date-item .date-day {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .date-item .date-weekday {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .date-item.active .date-weekday {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .date-item.today {
+            border-color: var(--accent);
+        }
+
+        /* 付费弹窗 */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .payment-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .payment-content {
+            background: #fff;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .payment-modal.show .payment-content {
+            transform: translateY(0);
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .payment-header h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .payment-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .payment-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary);
+            background: rgba(109, 139, 116, 0.05);
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            background: rgba(109, 139, 116, 0.1);
+        }
+
+        .payment-option .option-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .payment-option .option-text {
+            flex: 1;
+        }
+
+        .payment-option .option-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .payment-option .option-desc {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .payment-option .option-price {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .payment-footer {
+            text-align: center;
+        }
+
+        .payment-footer p {
+            color: #999;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .payment-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .payment-btn:hover {
+            background: #5a7561;
+        }
+
+        .payment-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #999;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        /* 彩票建议 */
+        .lottery-banner {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFD93D 100%);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: pulse-lottery 2s infinite;
+        }
+
+        @keyframes pulse-lottery {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 107, 107, 0); }
+        }
+
+        .lottery-banner .lottery-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .lottery-banner .lottery-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .lottery-banner .lottery-text strong {
+            font-size: 1rem;
+        }
+
+        /* 状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-top: 1px solid var(--accent);
+            margin-top: 40px;
+        }
+
+        /* 阴历/阳历切换 */
+        .calendar-toggle {
+            display: flex;
+            gap: 0;
+            margin-bottom: 12px;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            overflow: hidden;
+            width: fit-content;
+        }
+
+        .toggle-btn {
+            padding: 10px 28px;
+            border: none;
+            background: var(--background);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 性别切换 */
+        .gender-toggle {
+            display: flex;
+            gap: 0;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            overflow: hidden;
+            width: fit-content;
+        }
+
+        /* 出生地二级选择器 */
+        .birthplace-selects {
+            display: flex;
+            gap: 12px;
+        }
+
+        .birthplace-select {
+            flex: 1;
+        }
+
+        /* 阴历三联选择器 */
+        .lunar-selects {
+            display: flex;
+            gap: 12px;
+        }
+
+        .lunar-select {
+            flex: 1;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .energy-name {
+                font-size: 2rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+
+            .lunar-selects {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1 class="title">职场时位 AI 小助手</h1>
+            <p class="subtitle">每日职场避坑导航 · 基于传统历法与职场心理学</p>
+        </div>
+
+        <!-- 信息录入页 (默认显示) -->
+        <div id="onboarding-page">
+            <div class="card">
+                <h2 class="card-title">📝 基本信息录入</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">请填写以下信息，我们将为您提供每日职场建议。</p>
+                
+                <div class="form-group">
+                    <label class="form-label">出生日期</label>
+                    <div class="calendar-toggle">
+                        <button type="button" id="solar-btn" class="toggle-btn active">阳历</button>
+                        <button type="button" id="lunar-btn" class="toggle-btn">阴历</button>
+                    </div>
+                    <!-- 阳历模式 -->
+                    <div id="solar-input">
+                        <input type="date" id="birthday" class="form-input" max="2026-05-23">
+                    </div>
+                    <!-- 阴历模式 -->
+                    <div id="lunar-input" class="hidden">
+                        <div class="lunar-selects">
+                            <select id="lunar-year" class="form-input lunar-select">
+                                <option value="">年份</option>
+                            </select>
+                            <select id="lunar-month" class="form-input lunar-select">
+                                <option value="">月份</option>
+                            </select>
+                            <select id="lunar-day" class="form-input lunar-select">
+                                <option value="">日期</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">出生时辰</label>
+                    <select id="shichen" class="form-input">
+                        <option value="">请选择出生时辰</option>
+                        <option value="23">🐀 子时 (23:00-01:00)</option>
+                        <option value="1">🐂 丑时 (01:00-03:00)</option>
+                        <option value="3">🐅 寅时 (03:00-05:00)</option>
+                        <option value="5">🐇 卯时 (05:00-07:00)</option>
+                        <option value="7">🐉 辰时 (07:00-09:00)</option>
+                        <option value="9">🐍 巳时 (09:00-11:00)</option>
+                        <option value="11">🐎 午时 (11:00-13:00)</option>
+                        <option value="13">🐐 未时 (13:00-15:00)</option>
+                        <option value="15">🐒 申时 (15:00-17:00)</option>
+                        <option value="17">🐓 酉时 (17:00-19:00)</option>
+                        <option value="19">🐕 戌时 (19:00-21:00)</option>
+                        <option value="21">🐖 亥时 (21:00-23:00)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">性别</label>
+                    <div class="gender-toggle">
+                        <button type="button" id="gender-male-btn" class="toggle-btn">男</button>
+                        <button type="button" id="gender-female-btn" class="toggle-btn">女</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">出生地</label>
+                    <div class="birthplace-selects">
+                        <select id="birthplace-province" class="form-input birthplace-select">
+                            <option value="">请选择省份</option>
+                        </select>
+                        <select id="birthplace-city" class="form-input birthplace-select">
+                            <option value="">请选择城市</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="background: var(--background); border-radius: 8px; padding: 16px; margin-bottom: 24px; color: var(--text-secondary); font-size: 0.9rem;">
+                    <strong>ℹ️</strong> 信息仅用于真太阳时校正，我们会加密存储，确保您的隐私安全。
+                </div>
+
+                <button id="submit-btn" class="btn btn-full" disabled>开始使用</button>
+            </div>
+        </div>
+
+        <!-- 首页 (默认隐藏) -->
+        <div id="home-page" class="hidden">
+            <!-- 日期顶部 -->
+            <div style="text-align: center; margin-bottom: 30px; color: var(--text-secondary);">
+                <div style="font-size: 1.2rem; font-weight: 500; margin-bottom: 4px;" id="today-date"></div>
+                <div id="today-subtitle">今日时位报告</div>
+            </div>
+
+            <!-- 日期选择器 -->
+            <div class="date-picker" id="date-picker">
+                <!-- JS动态生成 -->
+            </div>
+
+            <!-- 能量卡片 -->
+            <div class="energy-card" id="energy-card">
+                <div class="energy-tag">
+                    <div class="energy-icon" id="energy-icon">⚡</div>
+                    <div class="energy-name" id="energy-name">伤官日</div>
+                </div>
+                <div class="relation-tag" id="relation-tag">今日地支逢冲，注意情绪波动</div>
+                <div class="ganzhi-info" id="ganzhi-info">今日：丙戌</div>
+            </div>
+
+            <!-- 建议区域 -->
+            <div class="card">
+                <h2 class="card-title">📋 今日避坑导航</h2>
+                <div class="advice-list" id="advice-list">
+                    <!-- JS动态生成 -->
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div style="display: flex; gap: 16px; margin-top: 30px;">
+                <button id="recalculate-btn" class="btn">🔄 重新计算</button>
+                <button id="reset-btn" class="btn" style="background: var(--accent); color: var(--text-primary);">🔄 重新录入信息</button>
+            </div>
+        </div>
+
+        <!-- 加载状态 -->
+        <div id="loading-page" class="hidden">
+            <div class="loading">
+                <div style="font-size: 1.5rem; margin-bottom: 16px;">⏳</div>
+                <div>正在分析今日能量...</div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="footer">
+            <p>所有建议仅供职场策略参考，不构成任何形式的预测或占卜。</p>
+            <p style="margin-top: 8px; font-size: 0.8rem;">职场时位 v0.1.0 · 网页测试版</p>
+        </div>
+    </div>
+
+    <!-- 付费弹窗 -->
+    <div id="payment-modal" class="payment-modal">
+        <div class="payment-content">
+            <button class="close-modal" id="close-payment-modal">×</button>
+            <div class="payment-header">
+                <h2>解锁完整功能</h2>
+                <p>付费后即可查看未来 7 天详细时位报告</p>
+            </div>
+            <div class="payment-options">
+                <div class="payment-option" data-plan="weekly">
+                    <div class="option-icon">📅</div>
+                    <div class="option-text">
+                        <div class="option-title">周会员</div>
+                        <div class="option-desc">解锁未来 7 天完整报告，每日更新</div>
+                    </div>
+                    <div class="option-price">¥9.9</div>
+                </div>
+                <div class="payment-option" data-plan="monthly">
+                    <div class="option-icon">📊</div>
+                    <div class="option-text">
+                        <div class="option-title">月会员</div>
+                        <div class="option-desc">30 天完整报告，包含月度趋势分析</div>
+                    </div>
+                    <div class="option-price">¥29.9</div>
+                </div>
+                <div class="payment-option" data-plan="yearly">
+                    <div class="option-icon">🎯</div>
+                    <div class="option-text">
+                        <div class="option-title">年会员</div>
+                        <div class="option-desc">全年 365 天报告，含年度运势总结</div>
+                    </div>
+                    <div class="option-price">¥199</div>
+                </div>
+            </div>
+            <div class="payment-footer">
+                <p>支付后立即生效，支持微信支付、支付宝</p>
+                <button id="confirm-payment-btn" class="payment-btn" disabled>确认支付</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 配置数据
+        const config = {
+            shichenList: [
+                { label: '子时', time: '23:00-01:00', value: 23, emoji: '🐀' },
+                { label: '丑时', time: '01:00-03:00', value: 1, emoji: '🐂' },
+                { label: '寅时', time: '03:00-05:00', value: 3, emoji: '🐅' },
+                { label: '卯时', time: '05:00-07:00', value: 5, emoji: '🐇' },
+                { label: '辰时', time: '07:00-09:00', value: 7, emoji: '🐉' },
+                { label: '巳时', time: '09:00-11:00', value: 9, emoji: '🐍' },
+                { label: '午时', time: '11:00-13:00', value: 11, emoji: '🐎' },
+                { label: '未时', time: '13:00-15:00', value: 13, emoji: '🐐' },
+                { label: '申时', time: '15:00-17:00', value: 15, emoji: '🐒' },
+                { label: '酉时', time: '17:00-19:00', value: 17, emoji: '🐓' },
+                { label: '戌时', time: '19:00-21:00', value: 19, emoji: '🐕' },
+                { label: '亥时', time: '21:00-23:00', value: 21, emoji: '🐖' }
+            ],
+            // 省份/城市二级数据
+            provinceCityMap: {
+                '北京市': ['东城区', '西城区', '朝阳区', '海淀区', '丰台区', '石景山区', '通州区', '大兴区', '昌平区', '顺义区'],
+                '天津市': ['和平区', '河东区', '河西区', '南开区', '河北区', '红桥区', '滨海新区', '东丽区', '西青区', '津南区'],
+                '河北省': ['石家庄市', '唐山市', '秦皇岛市', '邯郸市', '邢台市', '保定市', '张家口市', '承德市', '沧州市', '廊坊市', '衡水市'],
+                '山西省': ['太原市', '大同市', '阳泉市', '长治市', '晋城市', '朔州市', '晋中市', '运城市', '忻州市', '临汾市', '吕梁市'],
+                '内蒙古': ['呼和浩特', '包头市', '乌海市', '赤峰市', '通辽市', '鄂尔多斯', '呼伦贝尔', '巴彦淖尔', '乌兰察布', '兴安盟'],
+                '辽宁省': ['沈阳市', '大连市', '鞍山市', '抚顺市', '本溪市', '丹东市', '锦州市', '营口市', '阜新市', '辽阳市', '盘锦市', '铁岭市', '朝阳市', '葫芦岛市'],
+                '吉林省': ['长春市', '吉林市', '四平市', '辽源市', '通化市', '白山市', '松原市', '白城市', '延边州'],
+                '黑龙江省': ['哈尔滨', '齐齐哈尔', '鸡西市', '鹤岗市', '双鸭山', '大庆市', '伊春市', '佳木斯', '七台河', '牡丹江', '黑河市', '绥化市'],
+                '上海市': ['黄浦区', '徐汇区', '长宁区', '静安区', '普陀区', '虹口区', '杨浦区', '闵行区', '宝山区', '嘉定区', '浦东新区', '松江区'],
+                '江苏省': ['南京市', '无锡市', '徐州市', '常州市', '苏州市', '南通市', '连云港', '淮安市', '盐城市', '扬州市', '镇江市', '泰州市', '宿迁市'],
+                '浙江省': ['杭州市', '宁波市', '温州市', '嘉兴市', '湖州市', '绍兴市', '金华市', '衢州市', '舟山市', '台州市', '丽水市'],
+                '安徽省': ['合肥市', '芜湖市', '蚌埠市', '淮南市', '马鞍山', '淮北市', '铜陵市', '安庆市', '黄山市', '滁州市', '阜阳市', '宿州市', '六安市', '亳州市', '池州市', '宣城市'],
+                '福建省': ['福州市', '厦门市', '莆田市', '三明市', '泉州市', '漳州市', '南平市', '龙岩市', '宁德市'],
+                '江西省': ['南昌市', '景德镇', '萍乡市', '九江市', '新余市', '鹰潭市', '赣州市', '吉安市', '宜春市', '抚州市', '上饶市'],
+                '山东省': ['济南市', '青岛市', '淄博市', '枣庄市', '东营市', '烟台市', '潍坊市', '济宁市', '泰安市', '威海市', '日照市', '临沂市', '德州市', '聊城市', '滨州市', '菏泽市'],
+                '河南省': ['郑州市', '开封市', '洛阳市', '平顶山', '安阳市', '鹤壁市', '新乡市', '焦作市', '濮阳市', '许昌市', '漯河市', '三门峡', '南阳市', '商丘市', '信阳市', '周口市', '驻马店'],
+                '湖北省': ['武汉市', '黄石市', '十堰市', '宜昌市', '襄阳市', '鄂州市', '荆门市', '孝感市', '荆州市', '黄冈市', '咸宁市', '随州市', '恩施州'],
+                '湖南省': ['长沙市', '株洲市', '湘潭市', '衡阳市', '邵阳市', '岳阳市', '常德市', '张家界', '益阳市', '郴州市', '永州市', '怀化市', '娄底市', '湘西州'],
+                '广东省': ['广州市', '韶关市', '深圳市', '珠海市', '汕头市', '佛山市', '江门市', '湛江市', '茂名市', '肇庆市', '惠州市', '梅州市', '汕尾市', '河源市', '阳江市', '清远市', '东莞市', '中山市', '潮州市', '揭阳市', '云浮市'],
+                '广西': ['南宁市', '柳州市', '桂林市', '梧州市', '北海市', '防城港', '钦州市', '贵港市', '玉林市', '百色市', '贺州市', '河池市', '来宾市', '崇左市'],
+                '海南省': ['海口市', '三亚市', '三沙市', '儋州市'],
+                '重庆市': ['万州区', '涪陵区', '渝中区', '大渡口', '江北区', '沙坪坝', '九龙坡', '南岸区', '北碚区', '渝北区', '巴南区'],
+                '四川省': ['成都市', '自贡市', '攀枝花', '泸州市', '德阳市', '绵阳市', '广元市', '遂宁市', '内江市', '乐山市', '南充市', '眉山市', '宜宾市', '广安市', '达州市', '雅安市', '巴中市', '资阳市'],
+                '贵州省': ['贵阳市', '六盘水', '遵义市', '安顺市', '毕节市', '铜仁市', '黔西南', '黔东南', '黔南州'],
+                '云南省': ['昆明市', '曲靖市', '玉溪市', '保山市', '昭通市', '丽江市', '普洱市', '临沧市', '楚雄州', '红河州', '文山州', '西双版纳', '大理州', '德宏州', '怒江州', '迪庆州'],
+                '西藏': ['拉萨市', '日喀则', '昌都市', '林芝市', '山南市', '那曲市', '阿里地区'],
+                '陕西省': ['西安市', '铜川市', '宝鸡市', '咸阳市', '渭南市', '延安市', '汉中市', '榆林市', '安康市', '商洛市'],
+                '甘肃省': ['兰州市', '嘉峪关', '金昌市', '白银市', '天水市', '武威市', '张掖市', '平凉市', '酒泉市', '庆阳市', '定西市', '陇南市', '临夏州', '甘南州'],
+                '青海省': ['西宁市', '海东市', '海北州', '黄南州', '海南州', '果洛州', '玉树州', '海西州'],
+                '宁夏': ['银川市', '石嘴山', '吴忠市', '固原市', '中卫市'],
+                '新疆': ['乌鲁木齐', '克拉玛依', '吐鲁番', '哈密市', '昌吉州', '博尔塔拉', '巴音郭楞', '阿克苏', '克孜勒苏', '喀什地区', '和田地区', '伊犁州', '塔城地区', '阿勒泰'],
+                '台湾省': ['台北市', '高雄市', '台中市', '台南市', '新北市', '桃园市', '基隆市', '新竹市', '嘉义市'],
+                '香港': ['中西区', '湾仔区', '东区', '南区', '油尖旺', '深水埗', '九龙城', '黄大仙', '观塘区', '荃湾区', '屯门区', '元朗区', '北区', '大埔区', '沙田区', '西贡区', '离岛区'],
+                '澳门': ['澳门半岛', '氹仔', '路环', '路氹城']
+            },
+            tenGodConfig: {
+                '伤官': { color: '#E57373', icon: '⚡', name: '伤官日' },
+                '食神': { color: '#81C784', icon: '🍃', name: '食神日' },
+                '正财': { color: '#64B5F6', icon: '💰', name: '正财日' },
+                '偏财': { color: '#7986CB', icon: '💎', name: '偏财日' },
+                '正官': { color: '#4DB6AC', icon: '👑', name: '正官日' },
+                '七杀': { color: '#9575CD', icon: '⚔️', name: '七杀日' },
+                '正印': { color: '#FFB74D', icon: '📚', name: '正印日' },
+                '偏印': { color: '#A1887F', icon: '🔮', name: '偏印日' },
+                '比肩': { color: '#90A4AE', icon: '🤝', name: '比肩日' },
+                '劫财': { color: '#F06292', icon: '⚖️', name: '劫财日' },
+                '平和': { color: '#6D8B74', icon: '☯', name: '平和日' }
+            },
+
+            // 关系配置
+            relationConfig: {
+                '逢冲': { color: '#FF8A65', text: '今日地支逢冲，注意情绪波动' },
+                '逢合': { color: '#4DB6AC', text: '今日地支逢合，适合合作沟通' },
+                '平和': { color: '#90A4AE', text: '今日地支平和，按部就班即可' }
+            }
+        };
+
+        // 状态管理
+        const state = {
+            profile: null,
+            todayCard: null,
+            calendarMode: 'solar',
+            selectedShichen: null,
+            gender: null, // 'male' or 'female'
+            selectedDate: null, // 用户选中的日期（null=今天）
+            paymentConfirmed: false, // 是否已付费
+            selectedPlan: null // 选中的付费方案
+        };
+
+        // DOM 元素
+        const elements = {
+            onboardingPage: document.getElementById('onboarding-page'),
+            homePage: document.getElementById('home-page'),
+            loadingPage: document.getElementById('loading-page'),
+            submitBtn: document.getElementById('submit-btn'),
+            birthdayInput: document.getElementById('birthday'),
+            todayDate: document.getElementById('today-date'),
+            todaySubtitle: document.getElementById('today-subtitle'),
+            energyCard: document.getElementById('energy-card'),
+            energyIcon: document.getElementById('energy-icon'),
+            energyName: document.getElementById('energy-name'),
+            relationTag: document.getElementById('relation-tag'),
+            ganzhiInfo: document.getElementById('ganzhi-info'),
+            adviceList: document.getElementById('advice-list'),
+            recalculateBtn: document.getElementById('recalculate-btn'),
+            resetBtn: document.getElementById('reset-btn'),
+            solarBtn: document.getElementById('solar-btn'),
+            lunarBtn: document.getElementById('lunar-btn'),
+            solarInput: document.getElementById('solar-input'),
+            lunarInput: document.getElementById('lunar-input'),
+            lunarYear: document.getElementById('lunar-year'),
+            lunarMonth: document.getElementById('lunar-month'),
+            lunarDay: document.getElementById('lunar-day'),
+            shichenSelect: document.getElementById('shichen'),
+            genderMaleBtn: document.getElementById('gender-male-btn'),
+            genderFemaleBtn: document.getElementById('gender-female-btn'),
+            birthplaceProvince: document.getElementById('birthplace-province'),
+            birthplaceCity: document.getElementById('birthplace-city'),
+            datePicker: document.getElementById('date-picker'),
+            paymentModal: document.getElementById('payment-modal'),
+            closePaymentModal: document.getElementById('close-payment-modal'),
+            confirmPaymentBtn: document.getElementById('confirm-payment-btn'),
+            paymentOptions: document.querySelectorAll('.payment-option')
+        };
+
+        // 初始化
+        function init() {
+            // 设置默认生日（30年前）
+            const defaultDate = new Date();
+            defaultDate.setFullYear(defaultDate.getFullYear() - 30);
+            elements.birthdayInput.value = defaultDate.toISOString().split('T')[0];
+
+            // 初始化阴历选择器
+            initLunarSelectors();
+
+            // 初始化出生地选择器
+            initBirthplaceSelectors();
+
+            // 绑定事件
+            bindEvents();
+
+            // 检查本地存储
+            checkLocalStorage();
+        }
+
+        // 初始化出生地选择器
+        function initBirthplaceSelectors() {
+            const provinces = Object.keys(config.provinceCityMap);
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province;
+                option.textContent = province;
+                elements.birthplaceProvince.appendChild(option);
+            });
+        }
+
+        // 更新城市列表
+        function updateCityOptions(province) {
+            elements.birthplaceCity.innerHTML = '<option value="">请选择城市</option>';
+            if (!province) return;
+            const cities = config.provinceCityMap[province];
+            if (cities) {
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    elements.birthplaceCity.appendChild(option);
+                });
+            }
+        }
+
+        // 初始化阴历选择器
+        function initLunarSelectors() {
+            // 年份：1900-2026
+            for (let year = 1900; year <= 2026; year++) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = `${year}年`;
+                elements.lunarYear.appendChild(option);
+            }
+
+            // 月份：1-12
+            for (let month = 1; month <= 12; month++) {
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = `${month}月`;
+                elements.lunarMonth.appendChild(option);
+            }
+
+            // 日期：1-30（初始）
+            updateLunarDays();
+        }
+
+        // 更新阴历日期选项
+        function updateLunarDays() {
+            elements.lunarDay.innerHTML = '<option value="">日期</option>';
+            const selectedMonth = parseInt(elements.lunarMonth.value) || 1;
+            
+            // 阴历月份天数（简化：大月30天，小月29天）
+            const daysInMonth = [29, 30]; // 小月29，大月30
+            const isLeapMonth = false; // 简化，不考虑闰月
+            
+            // 随机决定大月小月（实际应查表）
+            const days = daysInMonth[Math.floor(Math.random() * 2)];
+            
+            for (let day = 1; day <= days; day++) {
+                const option = document.createElement('option');
+                option.value = day;
+                option.textContent = `${day}日`;
+                elements.lunarDay.appendChild(option);
+            }
+        }
+
+        // 显示付费弹窗
+        function showPaymentModal() {
+            state.selectedPlan = null;
+            elements.confirmPaymentBtn.disabled = true;
+            elements.paymentModal.classList.add('show');
+        }
+
+        // 隐藏付费弹窗
+        function hidePaymentModal() {
+            elements.paymentModal.classList.remove('show');
+            
+            // 如果还没付费，显示今天的免费结果作为预览
+            if (!state.paymentConfirmed) {
+                state.selectedDate = null; // 重置为今天
+                calculateTodayCard();
+                renderDatePicker();
+                showPage('home');
+            }
+        }
+
+        // 处理付费确认
+        function handlePaymentConfirmation() {
+            if (!state.selectedPlan) return;
+            
+            // 模拟支付成功
+            state.paymentConfirmed = true;
+            
+            // 保存支付状态
+            localStorage.setItem('workplace_ai_payment', JSON.stringify({
+                paymentConfirmed: true,
+                selectedPlan: state.selectedPlan
+            }));
+            
+            hidePaymentModal();
+            
+            // 继续计算流程
+            calculateTodayCard(state.selectedDate);
+            renderDatePicker();
+            showPage('home');
+        }
+
+        // 检查表单有效性
+        function checkFormValidity() {
+            const province = elements.birthplaceProvince.value;
+            const city = elements.birthplaceCity.value;
+            const shichenVal = elements.shichenSelect.value;
+            
+            let hasBirthday = false;
+            if (state.calendarMode === 'solar') {
+                hasBirthday = !!elements.birthdayInput.value;
+            } else {
+                hasBirthday = !!elements.lunarYear.value && !!elements.lunarMonth.value && !!elements.lunarDay.value;
+            }
+
+            elements.submitBtn.disabled = !(hasBirthday && state.gender && province && city && shichenVal);
+        }
+
+        // 绑定事件
+        function bindEvents() {
+            // 阳历/阴历切换
+            elements.solarBtn.addEventListener('click', () => switchCalendarMode('solar'));
+            elements.lunarBtn.addEventListener('click', () => switchCalendarMode('lunar'));
+
+            // 阳历日期输入
+            elements.birthdayInput.addEventListener('change', checkFormValidity);
+            
+            // 阴历选择器
+            elements.lunarYear.addEventListener('change', checkFormValidity);
+            elements.lunarMonth.addEventListener('change', () => {
+                updateLunarDays();
+                checkFormValidity();
+            });
+            elements.lunarDay.addEventListener('change', checkFormValidity);
+
+            // 性别
+            elements.genderMaleBtn.addEventListener('click', () => selectGender('male'));
+            elements.genderFemaleBtn.addEventListener('click', () => selectGender('female'));
+
+            // 出生地
+            elements.birthplaceProvince.addEventListener('change', () => {
+                updateCityOptions(elements.birthplaceProvince.value);
+                checkFormValidity();
+            });
+            elements.birthplaceCity.addEventListener('change', checkFormValidity);
+
+            // 时辰下拉
+            elements.shichenSelect.addEventListener('change', () => {
+                state.selectedShichen = elements.shichenSelect.value;
+                checkFormValidity();
+            });
+
+            // 提交按钮 → 付费弹窗
+            elements.submitBtn.addEventListener('click', () => {
+                // 保存用户数据
+                saveProfileData();
+                // 显示加载动画
+                showPage('loading');
+                // 加载动画后弹出付费弹窗
+                setTimeout(() => {
+                    showPaymentModal();
+                }, 1500);
+            });
+
+            // 付费弹窗相关事件
+            elements.closePaymentModal.addEventListener('click', hidePaymentModal);
+            elements.confirmPaymentBtn.addEventListener('click', handlePaymentConfirmation);
+            
+            // 点击弹窗遮罩层关闭
+            elements.paymentModal.addEventListener('click', (e) => {
+                if (e.target === elements.paymentModal) {
+                    hidePaymentModal();
+                }
+            });
+            
+            // 付费方案选择
+            elements.paymentOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // 移除其他选项的选中状态
+                    elements.paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                    // 选中当前选项
+                    option.classList.add('selected');
+                    state.selectedPlan = option.dataset.plan;
+                    elements.confirmPaymentBtn.disabled = false;
+                });
+            });
+
+            // 重新计算（重置到今日）
+            elements.recalculateBtn.addEventListener('click', () => {
+                state.selectedDate = null;
+                renderDatePicker();
+                calculateTodayCard();
+            });
+
+            // 重新录入
+            elements.resetBtn.addEventListener('click', resetApp);
+        }
+
+        // 选择性别
+        function selectGender(gender) {
+            state.gender = gender;
+            elements.genderMaleBtn.classList.toggle('active', gender === 'male');
+            elements.genderFemaleBtn.classList.toggle('active', gender === 'female');
+            checkFormValidity();
+        }
+
+        // 切换历法模式
+        function switchCalendarMode(mode) {
+            state.calendarMode = mode;
+            if (mode === 'solar') {
+                elements.solarBtn.classList.add('active');
+                elements.lunarBtn.classList.remove('active');
+                elements.solarInput.classList.remove('hidden');
+                elements.lunarInput.classList.add('hidden');
+            } else {
+                elements.lunarBtn.classList.add('active');
+                elements.solarBtn.classList.remove('active');
+                elements.lunarInput.classList.remove('hidden');
+                elements.solarInput.classList.add('hidden');
+            }
+            checkFormValidity();
+        }
+
+        // 提交个人信息
+        function submitProfile() {
+            const province = elements.birthplaceProvince.value;
+            const city = elements.birthplaceCity.value;
+            const shichenVal = elements.shichenSelect.value;
+            
+            if (!state.gender || !province || !city || !shichenVal) return;
+
+            // 获取出生日期
+            let birthdayData = null;
+            if (state.calendarMode === 'solar') {
+                const birthday = elements.birthdayInput.value;
+                if (!birthday) return;
+                birthdayData = {
+                    mode: 'solar',
+                    date: birthday
+                };
+            } else {
+                const year = elements.lunarYear.value;
+                const month = elements.lunarMonth.value;
+                const day = elements.lunarDay.value;
+                if (!year || !month || !day) return;
+                birthdayData = {
+                    mode: 'lunar',
+                    year: parseInt(year),
+                    month: parseInt(month),
+                    day: parseInt(day)
+                };
+            }
+
+            // 找到对应的时辰对象
+            const shichenObj = config.shichenList.find(item => item.value == shichenVal);
+
+            // 保存到状态
+            state.profile = {
+                birthday: birthdayData,
+                gender: state.gender,
+                birthplace: {
+                    province,
+                    city
+                },
+                shichen: shichenObj
+            };
+
+            // 保存支付状态
+            localStorage.setItem('workplace_ai_payment', JSON.stringify({
+                paymentConfirmed: state.paymentConfirmed,
+                selectedPlan: state.selectedPlan
+            }));
+
+            // 保存到本地存储
+            localStorage.setItem('workplace_ai_profile', JSON.stringify(state.profile));
+
+            // 切换到加载状态
+            showPage('loading');
+            
+            // 模拟处理延迟
+            setTimeout(() => {
+                // 首次计算：需要付费
+                showPaymentModal();
+            }, 1500);
+        }
+
+        // 检查本地存储
+        function checkLocalStorage() {
+            // 恢复支付状态
+            const savedPayment = localStorage.getItem('workplace_ai_payment');
+            if (savedPayment) {
+                try {
+                    const paymentData = JSON.parse(savedPayment);
+                    state.paymentConfirmed = paymentData.paymentConfirmed || false;
+                    state.selectedPlan = paymentData.selectedPlan || null;
+                } catch (e) {}
+            }
+
+            const saved = localStorage.getItem('workplace_ai_profile');
+            if (saved) {
+                try {
+                    state.profile = JSON.parse(saved);
+                    
+                    // 恢复表单状态：生日
+                    if (state.profile.birthday) {
+                        if (state.profile.birthday.mode === 'solar') {
+                            elements.birthdayInput.value = state.profile.birthday.date;
+                            switchCalendarMode('solar');
+                        } else {
+                            elements.lunarYear.value = state.profile.birthday.year;
+                            elements.lunarMonth.value = state.profile.birthday.month;
+                            elements.lunarDay.value = state.profile.birthday.day;
+                            updateLunarDays();
+                            switchCalendarMode('lunar');
+                        }
+                    }
+                    
+                    // 恢复性别
+                    if (state.profile.gender) {
+                        selectGender(state.profile.gender);
+                    }
+                    
+                    // 恢复出生地
+                    if (state.profile.birthplace) {
+                        elements.birthplaceProvince.value = state.profile.birthplace.province;
+                        updateCityOptions(state.profile.birthplace.province);
+                        // 等城市列表渲染后设置城市值
+                        setTimeout(() => {
+                            elements.birthplaceCity.value = state.profile.birthplace.city;
+                        }, 50);
+                    }
+                    
+                    // 恢复时辰
+                    if (state.profile.shichen) {
+                        elements.shichenSelect.value = state.profile.shichen.value;
+                        state.selectedShichen = state.profile.shichen.value;
+                    }
+                    
+                    // 恢复后直接显示首页（已付费用户）
+                    if (state.paymentConfirmed) {
+                        showPage('home');
+                        calculateTodayCard();
+                        renderDatePicker();
+                    } else {
+                        // 未付费用户需要付费
+                        showPage('loading');
+                        setTimeout(() => {
+                            showPaymentModal();
+                        }, 500);
+                    }
+                } catch (e) {
+                    localStorage.removeItem('workplace_ai_profile');
+                }
+            }
+        }
+
+        // 显示指定页面
+        function showPage(pageName) {
+            elements.onboardingPage.classList.add('hidden');
+            elements.homePage.classList.add('hidden');
+            elements.loadingPage.classList.add('hidden');
+
+            if (pageName === 'onboarding') {
+                elements.onboardingPage.classList.remove('hidden');
+            } else if (pageName === 'home') {
+                elements.homePage.classList.remove('hidden');
+            } else if (pageName === 'loading') {
+                elements.loadingPage.classList.remove('hidden');
+            }
+        }
+
+        // 计算今日卡片
+        function calculateTodayCard(selectedDate = null) {
+            const today = selectedDate || new Date();
+            const dateStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+            elements.todayDate.textContent = dateStr;
+            
+            // 更新副标题
+            if (selectedDate) {
+                const isSameDay = (d1, d2) => 
+                    d1.getFullYear() === d2.getFullYear() &&
+                    d1.getMonth() === d2.getMonth() &&
+                    d1.getDate() === d2.getDate();
+                
+                if (isSameDay(today, new Date())) {
+                    elements.todaySubtitle.textContent = '今日时位报告';
+                } else {
+                    const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+                    const weekday = weekdays[today.getDay()];
+                    elements.todaySubtitle.textContent = `${today.getMonth() + 1}月${today.getDate()}日（周${weekday}）时位报告`;
+                }
+            } else {
+                elements.todaySubtitle.textContent = '今日时位报告';
+            }
+
+            // 模拟算法计算
+            const todayGanZhi = getTodayGanZhi(today);
+            const tenGod = getTenGod(todayGanZhi[0]);
+            const relation = getRelation('戌', todayGanZhi[1]);
+
+            // 更新卡片
+            const config = getTenGodConfig(tenGod);
+            const relConfig = getRelationConfig(relation);
+
+            elements.energyCard.style.background = `linear-gradient(135deg, ${config.color}, ${config.color}99)`;
+            elements.energyIcon.textContent = config.icon;
+            elements.energyName.textContent = config.name;
+            elements.relationTag.textContent = relConfig.text;
+            elements.relationTag.style.backgroundColor = relConfig.color;
+            elements.ganzhiInfo.textContent = `${selectedDate ? '该日' : '今日'}：${todayGanZhi}`;
+
+            // 生成建议
+            generateAdvice(tenGod, relation, today);
+
+            // 检查是否需要显示彩票建议
+            renderLotteryBanner(tenGod, relation);
+
+            // 保存到状态
+            state.todayCard = { tenGod, relation, todayGanZhi };
+        }
+
+        // 算法函数（与小程序保持一致）
+        function getTodayGanZhi(date = new Date()) {
+            const start = new Date(2026, 0, 1);
+            const days = Math.floor((date - start) / (1000 * 60 * 60 * 24));
+            const gan = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+            const zhi = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+            return gan[days % 10] + zhi[days % 12];
+        }
+
+        function getTenGod(todayGan) {
+            const map = {
+                '甲': '偏印', '乙': '正印', '丙': '七杀', '丁': '正官',
+                '戊': '偏财', '己': '正财', '庚': '食神', '辛': '伤官',
+                '壬': '比肩', '癸': '劫财'
+            };
+            return map[todayGan] || '平和';
+        }
+
+        function getRelation(dayBranch, todayZhi) {
+            const relations = {
+                '子午': '逢冲', '丑未': '逢冲', '寅申': '逢冲', '卯酉': '逢冲',
+                '辰戌': '逢冲', '巳亥': '逢冲',
+                '子丑': '逢合', '寅亥': '逢合', '卯戌': '逢合', '辰酉': '逢合',
+                '巳申': '逢合', '午未': '逢合'
+            };
+            const pair = dayBranch + todayZhi;
+            const reverse = todayZhi + dayBranch;
+            return relations[pair] || relations[reverse] || '平和';
+        }
+
+        function getTenGodConfig(tenGod) {
+            return config.tenGodConfig[tenGod] || config.tenGodConfig['平和'];
+        }
+
+        function getRelationConfig(relation) {
+            return config.relationConfig[relation] || config.relationConfig['平和'];
+        }
+
+        // 生成建议
+        function generateAdvice(tenGod, relation, date = new Date()) {
+            const adviceTemplates = {
+                '伤官': [
+                    { icon: '🚫', title: '避免情绪化决策', content: '今日能量易受外界影响，建议重要决策延至明日，先处理常规事务。' },
+                    { icon: '💬', title: '专注内部沟通', content: '适合与团队成员一对一沟通，避免在公开场合表达不同意见。' },
+                    { icon: '⏰', title: '利用碎片时间', content: '下午3-5点精力较集中，适合处理需要专注的文档或方案。' }
+                ],
+                '七杀': [
+                    { icon: '🎯', title: '专注核心任务', content: '今日适合处理重要但不紧急的工作，避免被琐事分散注意力。' },
+                    { icon: '🤝', title: '注意沟通方式', content: '表达观点时先肯定对方，再提出不同意见，保持职场和谐。' },
+                    { icon: '📊', title: '数据驱动决策', content: '重要决策前先收集数据支持，避免凭直觉判断。' }
+                ],
+                '正财': [
+                    { icon: '💰', title: '关注财务细节', content: '适合处理报销、预算等财务相关事务，仔细核对数字。' },
+                    { icon: '📈', title: '规划长期目标', content: '今日思维清晰，适合制定季度或年度工作计划。' },
+                    { icon: '🤝', title: '维护客户关系', content: '主动联系重要客户或合作伙伴，巩固业务关系。' }
+                ],
+                'default': [
+                    { icon: '🎯', title: '专注核心任务', content: '今日适合处理重要但不紧急的工作，避免被琐事分散注意力。' },
+                    { icon: '💬', title: '注意沟通方式', content: '表达观点时先肯定对方，再提出不同意见，保持职场和谐。' },
+                    { icon: '⏰', title: '合理安排时间', content: '上午处理创造性工作，下午处理执行性任务，效率更高。' }
+                ]
+            };
+
+            // 根据关系微调
+            let advice = adviceTemplates[tenGod] || adviceTemplates['default'];
+            
+            if (relation === '逢冲') {
+                advice[0] = { icon: '🚫', title: '避免冲突决策', content: '今日情绪易波动，重要决策建议延后，先处理常规事务。' };
+            } else if (relation === '逢合') {
+                advice[1] = { icon: '🤝', title: '把握合作机会', content: '适合与同事或合作伙伴深入沟通，达成共识。' };
+            }
+
+            // 渲染建议列表
+            elements.adviceList.innerHTML = '';
+            advice.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'advice-item';
+                div.innerHTML = `
+                    <div class="advice-icon">${item.icon}</div>
+                    <div class="advice-content">
+                        <div class="advice-title">${item.title}</div>
+                        <div class="advice-desc">${item.content}</div>
+                    </div>
+                `;
+                elements.adviceList.appendChild(div);
+            });
+        }
+
+        // 渲染彩票建议
+        function renderLotteryBanner(tenGod, relation) {
+            // 检查是否显示彩票建议：今日是正财日且地支逢合，或者随机10%概率
+            const shouldShowLottery = (tenGod === '正财' && relation === '逢合') || 
+                                     (tenGod === '偏财' && relation === '逢合') ||
+                                     Math.random() < 0.1; // 10%随机显示
+            
+            // 移除已有的彩票横幅
+            const existingBanner = document.getElementById('lottery-banner');
+            if (existingBanner) {
+                existingBanner.remove();
+            }
+            
+            if (shouldShowLottery) {
+                const banner = document.createElement('div');
+                banner.id = 'lottery-banner';
+                banner.className = 'lottery-banner';
+                banner.innerHTML = `
+                    <div class="lottery-icon">🎰</div>
+                    <div class="lottery-text">
+                        <strong>今日运气不错！</strong><br>
+                        适合买张彩票试试哦~ 小赌怡情，理性投注。
+                    </div>
+                `;
+                
+                // 插入到建议区域之前
+                const adviceCard = document.querySelector('.card');
+                if (adviceCard) {
+                    adviceCard.parentNode.insertBefore(banner, adviceCard);
+                }
+            }
+        }
+
+        // 生成最近7天日期选择器
+        function renderDatePicker() {
+            const container = document.getElementById('date-picker');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            const today = new Date();
+            
+            // 生成最近7天（今天+未来6天）
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                const isToday = i === 0;
+                const isSelected = state.selectedDate ? 
+                    date.toDateString() === state.selectedDate.toDateString() : isToday;
+                
+                const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+                const weekday = weekdays[date.getDay()];
+                const dayLabel = i === 0 ? '今天' : i === 1 ? '明天' : i === 2 ? '后天' : `周${weekday}`;
+                
+                const dateItem = document.createElement('div');
+                dateItem.className = `date-item ${isToday ? 'today' : ''} ${isSelected ? 'active' : ''}`;
+                dateItem.dataset.date = date.toISOString().split('T')[0];
+                dateItem.innerHTML = `
+                    <div class="date-label">${dayLabel}</div>
+                    <div class="date-day">${date.getDate()}</div>
+                    <div class="date-weekday">${weekday}</div>
+                `;
+                
+                dateItem.addEventListener('click', () => {
+                    // 移除所有active类
+                    document.querySelectorAll('.date-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    // 添加active类到当前项
+                    dateItem.classList.add('active');
+                    
+                    // 更新选中日期
+                    state.selectedDate = date;
+                    
+                    // 非今天日期且未付费：弹出付费弹窗
+                    if (i > 0 && !state.paymentConfirmed) {
+                        showPaymentModal();
+                    } else {
+                        calculateTodayCard(date);
+                    }
+                });
+                
+                container.appendChild(dateItem);
+            }
+        }
+
+        // 重置应用
+        function resetApp() {
+            if (confirm('确定要重新录入信息吗？当前信息将被清除。')) {
+                localStorage.removeItem('workplace_ai_profile');
+                state.profile = null;
+                state.todayCard = null;
+                state.selectedShichen = null;
+                state.gender = null;
+                state.selectedDate = null;
+                state.calendarMode = 'solar';
+                
+                // 重置表单
+                elements.shichenSelect.value = '';
+                elements.lunarYear.value = '';
+                elements.lunarMonth.value = '';
+                elements.lunarDay.value = '';
+                elements.birthplaceProvince.value = '';
+                updateCityOptions('');
+                
+                // 重置性别
+                elements.genderMaleBtn.classList.remove('active');
+                elements.genderFemaleBtn.classList.remove('active');
+                
+                // 切换回阳历模式
+                switchCalendarMode('solar');
+                
+                showPage('onboarding');
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

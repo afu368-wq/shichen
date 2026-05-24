@@ -1,0 +1,37 @@
+<!-- pages/settings/settings.wxml -->
+<view class="page">
+  
+  <view class="header">
+    <view class="title">设置</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">基本信息</view>
+    <view class="info-item">
+      <view class="info-label">出生日期</view>
+      <view class="info-value">{{profile?.birthday || '未录入'}}</view>
+    </view>
+    <view class="info-item">
+      <view class="info-label">出生时辰</view>
+      <view class="info-value">{{profile?.shichen || '未录入'}}</view>
+    </view>
+    <view class="info-item">
+      <view class="info-label">出生地</view>
+      <view class="info-value">{{profile?.jingdu ? '已记录' : '未录入'}}</view>
+    </view>
+  </view>
+
+  <view class="action-list">
+    <view class="action-item" bindtap="onResetProfile">
+      <view class="action-icon">🔄</view>
+      <view class="action-text">重新录入信息</view>
+      <view class="action-arrow">›</view>
+    </view>
+    <view class="action-item" bindtap="onAbout">
+      <view class="action-icon">ℹ️</view>
+      <view class="action-text">关于</view>
+      <view class="action-arrow">›</view>
+    </view>
+  </view>
+
+</view>

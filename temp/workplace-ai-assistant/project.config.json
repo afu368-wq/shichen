@@ -1,0 +1,38 @@
+{
+  "appid": "your-appid-here",
+  "projectname": "workplace-ai-assistant",
+  "miniprogramRoot": "./",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "compileType": "miniprogram",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "coverView": true,
+    "autoAudits": false,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true
+  },
+  "libVersion": "3.3.4",
+  "condition": {
+    "search": { "current": -1, "list": [] },
+    "conversation": { "current": -1, "list": [] },
+    "plugin": { "current": -1, "list": [] },
+    "game": { "current": -1, "list": [] },
+    "miniprogram": {
+      "current": 0,
+      "list": [
+        {
+          "id": -1,
+          "name": "首页",
+          "pathName": "pages/index/index",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
+}
