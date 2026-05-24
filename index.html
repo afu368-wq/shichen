@@ -2108,8 +2108,10 @@
             
             // 模拟处理延迟
             setTimeout(() => {
-                // 首次计算：需要付费
-                showPaymentModal();
+                state.paymentConfirmed = true;
+                calculateTodayCard();
+                renderDatePicker();
+                showPage('home');
             }, 1500);
         }
 
@@ -2169,18 +2171,10 @@
                         state.selectedShichen = state.profile.shichen.value;
                     }
                     
-                    // 恢复后直接显示首页（已付费用户）
-                    if (state.paymentConfirmed) {
-                        showPage('home');
-                        calculateTodayCard();
-                        renderDatePicker();
-                    } else {
-                        // 未付费用户需要付费
-                        showPage('loading');
-                        setTimeout(() => {
-                            showPaymentModal();
-                        }, 500);
-                    }
+                    // 恢复后直接显示首页
+                    showPage('home');
+                    calculateTodayCard();
+                    renderDatePicker();
                 } catch (e) {
                     localStorage.removeItem('workplace_ai_profile');
                 }
@@ -2657,12 +2651,8 @@
                     // 更新选中日期
                     state.selectedDate = date;
                     
-                    // 非今天日期且未付费：弹出付费弹窗
-                    if (i > 0 && !state.paymentConfirmed) {
-                        showPaymentModal();
-                    } else {
-                        calculateTodayCard(date);
-                    }
+                    // 直接计算结果
+                    calculateTodayCard(date);
                 });
                 
                 container.appendChild(dateItem);
