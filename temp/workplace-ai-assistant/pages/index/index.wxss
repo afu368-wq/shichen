@@ -1,0 +1,143 @@
+/* pages/index/index.wxss */
+.page {
+  min-height: 100vh;
+  padding: 60rpx 40rpx 80rpx;
+  box-sizing: border-box;
+}
+
+/* 日期头部 */
+.date-header {
+  text-align: center;
+  margin-bottom: 50rpx;
+}
+
+.date-text {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.date-sub {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+/* 加载 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* 能量卡片 */
+.energy-card {
+  border-radius: 32rpx;
+  padding: 50rpx 40rpx;
+  margin-bottom: 50rpx;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8rpx 40rpx rgba(0,0,0,0.1);
+  color: #FFFFFF;
+}
+
+.energy-tag {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.energy-icon {
+  font-size: 56rpx;
+}
+
+.energy-name {
+  font-size: 44rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+.relation-tag {
+  display: inline-block;
+  border-radius: 40rpx;
+  padding: 12rpx 28rpx;
+  font-size: 24rpx;
+  margin-bottom: 24rpx;
+  color: #FFFFFF;
+}
+
+.ganzhi-info {
+  font-size: 24rpx;
+  opacity: 0.8;
+  letter-spacing: 2rpx;
+}
+
+/* 建议区域 */
+.advice-section {
+  margin-bottom: 40rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 30rpx;
+}
+
+.advice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.advice-item {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  display: flex;
+  gap: 20rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0,0,0,0.04);
+}
+
+.advice-icon {
+  font-size: 40rpx;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.advice-content {
+  flex: 1;
+}
+
+.advice-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 10rpx;
+}
+
+.advice-desc {
+  font-size: 26rpx;
+  color: #666666;
+  line-height: 42rpx;
+}
+
+/* 底部提示 */
+.footer-tip {
+  text-align: center;
+  font-size: 22rpx;
+  color: #C0C0C0;
+  padding: 40rpx 0;
+  line-height: 36rpx;
+}

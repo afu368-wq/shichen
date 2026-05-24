@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>真太阳时测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-case { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .result { margin-top: 10px; padding: 10px; background: #f5f5f5; }
+        .pass { color: green; }
+        .fail { color: red; }
+    </style>
+</head>
+<body>
+    <h1>真太阳时功能测试</h1>
+    
+    <div id="test-results"></div>
+    
+    <script>
+        // 模拟 config.provinceLongitudes
+        const config = {
+            provinceLongitudes: {
+                '北京市': 116.40, '天津市': 117.20, '河北省': 114.48, '山西省': 112.53,
+                '内蒙古': 111.65, '辽宁省': 123.43, '吉林省': 125.35, '黑龙江省': 126.63,
+                '上海市': 121.47, '江苏省': 118.78, '浙江省': 120.15, '安徽省': 117.27,
+                '福建省': 119.30, '江西省': 115.85, '山东省': 117.00, '河南省': 113.65,
+                '湖北省': 114.31, '湖南省': 112.98, '广东省': 113.23, '广西': 108.33,
+                '海南省': 110.33, '重庆市': 106.55, '四川省': 104.07, '贵州省': 106.71,
+                '云南省': 102.83, '西藏': 91.17, '陕西省': 108.95, '甘肃省': 103.83,
+                '青海省': 101.78, '宁夏': 106.27, '新疆': 87.62, '台湾省': 121.50,
+                '香港': 114.17, '澳门': 113.55
+            }
+        };
+
+        // 真太阳时修正：根据省份经度计算时间偏移
+        function getSolarTimeOffset(province) {
+            // 使用北京时间（UTC+8）基准经度 120°E 作为参考
+            // 每向东1度+4分钟，向西-4分钟
+            const lng = config.provinceLongitudes[province];
+            if (lng === undefined || lng === null) return 0;
+            return (lng - 120) * 4; // 返回分钟偏移
+        }
+
+        // 根据真太阳时计算当前时辰
+        function getCurrentShichen(date = new Date(), province = null) {
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            const totalMinutes = hours * 60 + minutes;
+            
+            // 应用真太阳时偏移
+            const offset = province ? getSolarTimeOffset(province) : 0;
+            const solarMinutes = totalMinutes + offset;
+            // 归一化到 0-1440（一天内），处理跨天情况
+            const normalized = ((solarMinutes % 1440) + 1440) % 1440;
+            const solarHours = Math.floor(normalized / 60);
+            
+            // 时辰映射：每个时辰2小时
+            const shichenNames = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+            let idx;
+            if (solarHours >= 23 || solarHours < 1) idx = 0;       // 子时 23:00-00:59
+            else if (solarHours < 3) idx = 1;                       // 丑时 01:00-02:59
+            else if (solarHours < 5) idx = 2;                       // 寅时 03:00-04:59
+            else if (solarHours < 7) idx = 3;                       // 卯时 05:00-06:59
+            else if (solarHours < 9) idx = 4;                       // 辰时 07:00-08:59
+            else if (solarHours < 11) idx = 5;                      // 巳时 09:00-10:59
+            else if (solarHours < 13) idx = 6;                      // 午时 11:00-12:59
+            else if (solarHours < 15) idx = 7;                      // 未时 13:00-14:59
+            else if (solarHours < 17) idx = 8;                      // 申时 15:00-16:59
+            else if (solarHours < 19) idx = 9;                      // 酉时 17:00-18:59
+            else if (solarHours < 21) idx = 10;                     // 戌时 19:00-20:59
+            else idx = 11;                                          // 亥时 21:00-22:59
+            
+            return { name: shichenNames[idx], index: idx, offset: offset };
+        }
+
+        // 测试用例
+        const tests = [
+            {
+                name: "北京（东经116.4°）",
+                province: "北京市",
+                expectedOffset: (116.4 - 120) * 4, // -14.4分钟
+                testTime: new Date(2026, 4, 23, 14, 0, 0) // 14:00
+            },
+            {
+                name: "新疆（东经87.62°）",
+                province: "新疆",
+                expectedOffset: (87.62 - 120) * 4, // -129.5分钟
+                testTime: new Date(2026, 4, 23, 14, 0, 0)
+            },
+            {
+                name: "黑龙江（东经126.63°）",
+                province: "黑龙江省",
+                expectedOffset: (126.63 - 120) * 4, // +26.5分钟
+                testTime: new Date(2026, 4, 23, 14, 0, 0)
+            },
+            {
+                name: "无省份（默认北京时）",
+                province: null,
+                expectedOffset: 0,
+                testTime: new Date(2026, 4, 23, 14, 0, 0)
+            }
+        ];
+
+        // 运行测试
+        const results = document.getElementById('test-results');
+        let passed = 0, total = 0;
+
+        tests.forEach(test => {
+            total++;
+            const testDiv = document.createElement('div');
+            testDiv.className = 'test-case';
+            
+            const offset = getSolarTimeOffset(test.province);
+            const shichen = getCurrentShichen(test.testTime, test.province);
+            
+            const offsetDiff = Math.abs(offset - test.expectedOffset);
+            const isOffsetCorrect = offsetDiff < 0.1;
+            
+            if (isOffsetCorrect) passed++;
+            
+            testDiv.innerHTML = `
+                <h3>${test.name}</h3>
+                <div>省份：${test.province || '无'}</div>
+                <div>计算偏移：${offset.toFixed(1)}分钟</div>
+                <div>预期偏移：${test.expectedOffset.toFixed(1)}分钟</div>
+                <div>当前时辰：${shichen.name}时（偏移：${shichen.offset.toFixed(1)}分钟）</div>
+                <div class="result ${isOffsetCorrect ? 'pass' : 'fail'}">
+                    ${isOffsetCorrect ? '✓ 通过' : '✗ 失败'}
+                </div>
+            `;
+            
+            results.appendChild(testDiv);
+        });
+
+        // 总结
+        const summary = document.createElement('div');
+        summary.className = 'test-case';
+        summary.style.backgroundColor = passed === total ? '#d4edda' : '#f8d7da';
+        summary.innerHTML = `
+            <h2>测试总结</h2>
+            <div>通过：${passed}/${total}</div>
+            <div>${passed === total ? '✅ 所有测试通过' : '❌ 部分测试失败'}</div>
+        `;
+        results.appendChild(summary);
+    </script>
+</body>
+</html>

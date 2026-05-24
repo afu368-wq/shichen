@@ -1,0 +1,57 @@
+<!-- pages/index/index.wxml -->
+<view class="page" style="background-color: {{colors.background}};">
+
+  <!-- 日期顶部 -->
+  <view class="date-header">
+    <view class="date-text">{{todayDate}}</view>
+    <view class="date-sub">今日时位报告</view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-text">正在分析今日能量...</view>
+  </view>
+
+  <!-- 主信息卡片 -->
+  <view wx:else class="energy-card" 
+    style="background-color: {{tenGodConfig[todayCard.tenGod].color}};">
+
+    <!-- 能量标签 -->
+    <view class="energy-tag">
+      <view class="energy-icon">{{tenGodConfig[todayCard.tenGod].icon}}</view>
+      <view class="energy-name">{{tenGodConfig[todayCard.tenGod].name}}</view>
+    </view>
+
+    <!-- 关系标签 -->
+    <view class="relation-tag" 
+      style="background-color: {{relationConfig[todayCard.relation].color}};">
+      {{relationConfig[todayCard.relation].text}}
+    </view>
+
+    <!-- 今日干支 -->
+    <view class="ganzhi-info">
+      今日：{{todayCard.todayGanZhi}}
+    </view>
+  </view>
+
+  <!-- 避坑建议 -->
+  <view class="advice-section" wx:if="{{adviceList.length > 0}}">
+    <view class="section-title">今日避坑导航</view>
+    
+    <view class="advice-list">
+      <view wx:for="{{adviceList}}" wx:key="index" class="advice-item">
+        <view class="advice-icon">{{item.icon}}</view>
+        <view class="advice-content">
+          <view class="advice-title">{{item.title}}</view>
+          <view class="advice-desc">{{item.content}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer-tip">
+    所有建议仅供职场策略参考，不构成任何形式的预测或占卜。
+  </view>
+
+</view>

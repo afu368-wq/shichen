@@ -1,0 +1,78 @@
+<!-- pages/onboarding/onboarding.wxml -->
+<view class="page" style="background-color: {{colors.background}};">
+  
+  <!-- 头部 -->
+  <view class="header">
+    <view class="title">欢迎使用职场时位</view>
+    <view class="subtitle">请填写基本信息，我们将为您提供每日职场建议</view>
+  </view>
+
+  <!-- 表单卡片 -->
+  <view class="form-card" style="background-color: {{colors.card}};">
+    
+    <!-- 出生日期 -->
+    <view class="form-item">
+      <view class="label">出生日期</view>
+      <picker 
+        mode="date" 
+        fields="year" 
+        start="1900-01-01" 
+        end="{{new Date().toISOString().split('T')[0]}}"
+        value="{{date}}" 
+        bindchange="onDateChange">
+        <view class="picker {{date ? 'selected' : ''}}">
+          {{dateDisplay}}
+          <text class="icon">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 出生时辰 -->
+    <view class="form-item">
+      <view class="label">出生时辰</view>
+      <view class="shichen-container">
+        <view 
+          wx:for="{{shichenList}}" 
+          wx:key="index"
+          class="shichen-item {{selectedShichen === index ? 'selected' : ''}}"
+          data-index="{{index}}"
+          bindtap="onShichenTap">
+          {{item.label}}
+        </view>
+      </view>
+      <view class="selected-display">
+        已选：{{shichenDisplay}}
+      </view>
+    </view>
+
+    <!-- 出生地 -->
+    <view class="form-item">
+      <view class="label">出生地</view>
+      <picker 
+        mode="region" 
+        value="{{region}}" 
+        bindchange="onRegionChange">
+        <view class="picker {{region.length > 0 ? 'selected' : ''}}">
+          {{regionDisplay}}
+          <text class="icon">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 说明 -->
+    <view class="tip">
+      <text class="tip-icon">ℹ️</text>
+      信息仅用于真太阳时校正，我们会加密存储，确保您的隐私安全。
+    </view>
+
+    <!-- 提交按钮 -->
+    <button 
+      class="submit-btn {{canSubmit ? '' : 'disabled'}}" 
+      bindtap="onSubmit"
+      disabled="{{!canSubmit || submitting}}">
+      {{submitting ? '处理中...' : '开始使用'}}
+    </button>
+
+  </view>
+
+</view>
